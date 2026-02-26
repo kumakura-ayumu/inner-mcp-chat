@@ -18,15 +18,15 @@ Azure Static Web Apps にそのままデプロイできます。
 ## フォルダ構成
 
 ```
-inner-mcp-app/
-├── package.json             ← ルート: npm run dev で全プロセス起動
+inner-mcp-chat/
+├── .env.example             ← API キーのテンプレート
+├── docker-compose.yml       ← ローカル開発環境
 ├── staticwebapp.config.json ← Azure SWA ルーティング設定
 ├── frontend/                ← React 18 + Vite + Tailwind CSS v3
 │   ├── src/App.tsx          ← チャット UI
 │   └── vite.config.ts       ← /api を :7071 にプロキシ
 └── api/                     ← Azure Functions v4 (Node.js)
     ├── host.json
-    ├── local.settings.json  ← ローカル環境変数（git 管理外）
     └── src/
         ├── mcp-tools.ts         ← MCP ツール定義（ここにツールを追加）
         └── functions/
@@ -68,52 +68,23 @@ inner-mcp-app/
 
 ## セットアップ
 
-### 1. 前提ツールのインストール
-
 ```bash
-# Azure Functions Core Tools v4（グローバルインストール、初回のみ）
-npm install -g azure-functions-core-tools@4 --unsafe-perm true
+# 1. .env を作成して API キーを設定
+cp .env.example .env
+# GEMINI_API_KEY を書き換える
 
-# バージョン確認
-func --version  # 4.x.x
+# 2. 起動
+docker compose up --build
 ```
 
-### 2. 依存パッケージのインストール
-
-```bash
-npm install
-npm install --prefix api
-npm install --prefix frontend
-```
-
-### 3. API キーの設定
-
-`api/local.settings.json.example` をコピーして `api/local.settings.json` を作成し、Gemini API キーを設定してください。
-
-```bash
-cp api/local.settings.json.example api/local.settings.json
-```
-
-`GEMINI_API_KEY` を実際のキーに書き換えます。
+ブラウザで `http://localhost:5173` を開いてください。
 
 > API キーの取得: https://aistudio.google.com/app/apikey
 
-> `api/local.settings.json` は git 管理外です（`.gitignore` で除外済み）。
+> `.env` は git 管理外です（`.gitignore` で除外済み）。
 
-## 実行方法
-
-### チャット UI（フル構成）
-
-```bash
-npm run dev
-```
-
-| プロセス | 役割 | URL |
-|---|---|---|
-| `[api]` | Azure Functions | `http://localhost:7071/api/chat` |
-| `[frontend]` | Vite dev server | `http://localhost:5173` |
-
-ブラウザで `http://localhost:5173` を開き、「サーバーの状態を確認して」などと入力してください。
+> API コードを変更した場合は再ビルドが必要です:
+> `docker compose build api && docker compose restart api`
 
 ## 使用ライブラリ
 
