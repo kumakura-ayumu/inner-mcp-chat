@@ -1,0 +1,17 @@
+{
+  "name": "inner-mcp-app",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently -n api,frontend -c yellow,green \"npm run dev --prefix api\" \"npm run dev --prefix frontend\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

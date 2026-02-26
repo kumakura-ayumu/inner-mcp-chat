@@ -1,0 +1,21 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Azure Functions v4 - MCP + Gemini Chat API",
+  "main": "dist/src/functions/chat.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "start": "func start",
+    "dev": "npm run build && func start"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.5.0",
+    "@google/genai": "^1.43.0",
+    "@modelcontextprotocol/sdk": "^1.27.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
+  }
+}

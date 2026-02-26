@@ -1,0 +1,6 @@
+node_modules
+.env
+api/local.settings.json
+api/dist/
+frontend/dist/
+.claude/
