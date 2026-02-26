@@ -5,6 +5,10 @@ interface Message {
   content: string;
 }
 
+interface ClientPrincipal {
+  userDetails?: string;
+}
+
 export default function App() {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -15,7 +19,26 @@ export default function App() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [accessDenied, setAccessDenied] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  // 認証情報取得 + ドメインチェック
+  useEffect(() => {
+    const allowedDomain = import.meta.env.VITE_ALLOWED_DOMAIN as string | undefined;
+    fetch("/.auth/me")
+      .then((res) => res.json())
+      .then((data: { clientPrincipal?: ClientPrincipal | null }) => {
+        const email = (data.clientPrincipal?.userDetails ?? "").toLowerCase();
+        setUserEmail(email);
+        if (allowedDomain && email && !email.endsWith(`@${allowedDomain.toLowerCase()}`)) {
+          setAccessDenied(true);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setAuthChecked(true));
+  }, []);
 
   // 新しいメッセージが追加されたら自動スクロール
   useEffect(() => {
@@ -68,12 +91,29 @@ export default function App() {
     }
   };
 
+  if (!authChecked) return null;
+
+  if (accessDenied) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-50 gap-4">
+        <p className="text-xl font-semibold text-gray-700">アクセスが拒否されました</p>
+        <p className="text-sm text-gray-500">許可されたドメインのアカウントでログインしてください。</p>
+        <a href="/.auth/logout" className="text-blue-600 hover:underline text-sm">ログアウト</a>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       {/* ヘッダー */}
-      <header className="bg-blue-700 text-white px-6 py-4 shadow-md flex-shrink-0">
-        <h1 className="text-xl font-bold">インフラ監視 AI アシスタント</h1>
-        <p className="text-blue-200 text-sm mt-0.5">Powered by Gemini + MCP</p>
+      <header className="bg-blue-700 text-white px-6 py-4 shadow-md flex-shrink-0 flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold">インフラ監視 AI アシスタント</h1>
+          <p className="text-blue-200 text-sm mt-0.5">Powered by Gemini + MCP</p>
+        </div>
+        <span className="text-white text-sm opacity-80">
+          {userEmail || "ローカル開発中（未ログイン）"}
+        </span>
       </header>
 
       {/* チャット表示エリア */}

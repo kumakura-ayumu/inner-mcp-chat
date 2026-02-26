@@ -97,6 +97,27 @@ async function chatHandler(
   request: HttpRequest,
   context: InvocationContext
 ): Promise<HttpResponseInit> {
+  // ── ドメインチェック ──────────────────────────────────────────────────────
+  const allowedDomain = process.env["ALLOWED_DOMAIN"];
+  if (allowedDomain) {
+    const principalHeader = request.headers.get("x-ms-client-principal");
+    if (principalHeader) {
+      try {
+        const decoded = Buffer.from(principalHeader, "base64").toString("utf-8");
+        const principal = JSON.parse(decoded) as { userDetails?: string };
+        const email = (principal.userDetails ?? "").toLowerCase();
+        if (!email.endsWith(`@${allowedDomain.toLowerCase()}`)) {
+          return {
+            status: 403,
+            jsonBody: { error: "アクセスが拒否されました。許可されたドメインのアカウントでログインしてください。" },
+          };
+        }
+      } catch {
+        return { status: 403, jsonBody: { error: "認証情報の解析に失敗しました。" } };
+      }
+    }
+  }
+
   const apiKey = process.env["GEMINI_API_KEY"];
 
   if (!apiKey) {

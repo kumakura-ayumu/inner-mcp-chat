@@ -1,0 +1,9 @@
+{
+  "name": "inner-mcp-chat-docker",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "docker compose up --build",
+    "down": "docker compose down",
+    "down:clean": "docker compose down -v"
+  }
+}

@@ -1,0 +1,38 @@
+# バージョン管理
+.git
+.gitignore
+
+# Node 依存関係 - イメージ内で npm install するため除外
+node_modules
+api/node_modules
+frontend/node_modules
+
+# ビルド出力 - イメージビルド時に再生成するため除外
+api/dist
+frontend/dist
+
+# 機密情報 - docker-compose の environment: 経由で渡す
+.env
+.env.*
+api/local.settings.json
+
+# エディタ・IDE
+.vscode
+.idea
+*.code-workspace
+
+# OS アーティファクト
+.DS_Store
+Thumbs.db
+
+# ログ
+*.log
+npm-debug.log*
+
+# Docker 設定ファイル自体（イメージ内に含める必要なし）
+# docker/docker-entrypoint.sh は除外しない（Dockerfile で COPY するため）
+docker/Dockerfile
+docker/docker-compose.yml
+docker/package.json
+docker/package-lock.json
+.dockerignore
