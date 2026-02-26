@@ -88,20 +88,17 @@ npm install --prefix frontend
 
 ### 3. API キーの設定
 
-`api/local.settings.json` を作成し、Gemini API キーを設定してください。
+`api/local.settings.json.example` をコピーして `api/local.settings.json` を作成し、Gemini API キーを設定してください。
 
-```json
-{
-  "IsEncrypted": false,
-  "Values": {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_WORKER_RUNTIME": "node",
-    "GEMINI_API_KEY": "AIza...実際のキー..."
-  }
-}
+```bash
+cp api/local.settings.json.example api/local.settings.json
 ```
 
+`GEMINI_API_KEY` を実際のキーに書き換えます。
+
 > API キーの取得: https://aistudio.google.com/app/apikey
+
+> `api/local.settings.json` は git 管理外です（`.gitignore` で除外済み）。
 
 ## 実行方法
 
