@@ -32,7 +32,6 @@ services:
       AzureWebJobsStorage: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KkM1bX5bXMb==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
       FUNCTIONS_WORKER_RUNTIME: "node"
       DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: "1"
-      VITE_ALLOWED_DOMAIN: ${ALLOWED_DOMAIN}
     depends_on:
       - azurite
 

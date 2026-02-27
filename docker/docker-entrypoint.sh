@@ -51,6 +51,8 @@ done
 echo "[entrypoint] Azure Functions is ready."
 
 # Step 6: Vite dev server をバックグラウンドで起動
+# Vite は VITE_ プレフィックスの変数のみブラウザに公開するため、ALLOWED_DOMAIN をマッピング
+export VITE_ALLOWED_DOMAIN="${ALLOWED_DOMAIN:-}"
 # --host 0.0.0.0: コンテナ内の全インターフェースでリッスン（SWA CLI からアクセス可能にする）
 echo "[entrypoint] Starting Vite dev server on port 5173..."
 cd "$FRONTEND_DIR" && npx vite --host 0.0.0.0 --port 5173 &

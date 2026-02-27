@@ -98,7 +98,6 @@ export default function App() {
       <div className="flex flex-col items-center justify-center h-screen bg-gray-50 gap-4">
         <p className="text-xl font-semibold text-gray-700">アクセスが拒否されました</p>
         <p className="text-sm text-gray-500">許可されたドメインのアカウントでログインしてください。</p>
-        <a href="/.auth/logout" className="text-blue-600 hover:underline text-sm">ログアウト</a>
       </div>
     );
   }
